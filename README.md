@@ -51,8 +51,8 @@ Prerequisites: `adb` reachable to the modem, with a root shell (the modem rootfs
 curl -L https://raw.githubusercontent.com/fa0xh1/quectool-fork-release/main/deploy.sh -o deploy.sh
 chmod +x deploy.sh
 ./deploy.sh                                    # install latest GitHub release
-./deploy.sh v2.1.23                            # install a specific tag
-./deploy.sh ./quectool-v2.1.23-armv7.tar.gz    # install a local tarball
+./deploy.sh v2.0.0                             # install a specific tag
+./deploy.sh ./quectool-v2.0.0-armv7.tar.gz     # install a local tarball
 ```
 
 **Windows (PowerShell):**
@@ -60,11 +60,11 @@ chmod +x deploy.sh
 ```powershell
 Invoke-WebRequest https://raw.githubusercontent.com/fa0xh1/quectool-fork-release/main/deploy.ps1 -OutFile deploy.ps1
 .\deploy.ps1                                       # latest GitHub release
-.\deploy.ps1 v2.1.23                                # specific tag
-.\deploy.ps1 .\quectool-v2.1.23-armv7.tar.gz        # local tarball
+.\deploy.ps1 v2.0.0                                # specific tag
+.\deploy.ps1 .\quectool-v2.0.0-armv7.tar.gz        # local tarball
 ```
 
-`deploy.sh` downloads the release tarball from this repository, verifies its SHA-256, pushes it via adb, and runs the on-device installer. The installer drops the binary at `/usrdata/quectool/quectool`, the config at `/usrdata/quectool/quectool.yaml`, and a systemd unit at `/lib/systemd/system/quectool.service`. After install, browse to `https://<modem-ip>` — a self-signed cert is auto-generated on first boot covering every interface IP. Browsers warn the first time per device; trust once and it sticks.
+`deploy.sh` downloads the release tarball, verifies its SHA-256, pushes it via adb, and runs the on-device installer. The installer drops the binary at `/usrdata/quectool/quectool`, the config at `/usrdata/quectool/quectool.yaml`, and a systemd unit at `/lib/systemd/system/quectool.service`. After install, browse to `https://<modem-ip>` — a self-signed cert is auto-generated on first boot covering every interface IP. Browsers warn the first time per device; trust once and it sticks.
 
 Default credentials are `admin` / `quectool`. After logging in, click your username in the top-right to open the **Account** page and change the password. The new bcrypt hash is written to `/usrdata/quectool/credentials` (and that file always wins over whatever's in `quectool.yaml`). Forgotten password recovery: `adb shell rm /usrdata/quectool/credentials && adb shell systemctl restart quectool` resets to the bootstrap defaults.
 
@@ -82,7 +82,8 @@ adb shell "sh /usrdata/quectool/uninstall.sh"
 adb shell "sh /usrdata/quectool/uninstall.sh --purge"
 ```
 
-`--purge` deletes `/usrdata/quectool` after the service is stopped and the systemd unit removed — a clean slate for a fresh install.
+`--purge` deletes `/usrdata/quectool` after the service is stopped and the
+systemd unit removed — a clean slate for a fresh install.
 
 <details>
 <summary>Manual install (no deploy script — works on any OS with adb)</summary>
